@@ -1,23 +1,15 @@
 {
   "name": "my_movie_api",
   "version": "1.0.0",
-  "description": "My Movie API Package",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/punithacasi/My_Movie_API.git"
-  },
   "author": "Punitha",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/punithacasi/My_Movie_API/issues"
-  },
-  "homepage": "https://github.com/punithacasi/My_Movie_API#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
   }
 }
