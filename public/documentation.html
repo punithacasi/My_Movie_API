@@ -5,14 +5,295 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Movie API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background-color: #CCC;
+        }
+
+        td,
+        th {
+            border: solid 1px #bbb;
+            margin: 0px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        th-style {
+            width: 20%;
+        }
+
+        code,
+        pre {
+            color: blue;
+
+            white-space: pre-wrap;
+            /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap;
+            /* Mozilla, since 1999 */
+            white-space: -pre-wrap;
+            /* Opera 4-6 */
+            white-space: -o-pre-wrap;
+            /* Opera 7 */
+            word-wrap: break-word;
+            /* Internet Explorer 5.5+ */
+        }
+    </style>
 </head>
 
 <body>
-    <h1>How to use My Movie API.</h1>
-    <p>
-        <ul>Movie API allows you to view List of movies, directors, and genres.</ul>
-        <ul>Movie API allows you to sign up and update your personal information and create a list of your favorite movies.</ul>
-    </p>
-</body>
+    <h1>My Movie API Documentation</h1>
+    <table>
+        <tr>
+            <th class="th-style">
+                Business Logic
+            </th>
+            <th class="th-style">
+                URL
+            </th>
+            <th class="th-style">
+                HTTP Method
+            </th>
+            <th class="th-style">
+                Request body data format
+            </th>
+            <th>
+                Response body data format
+            </th>
+        </tr>
+        <tr>
+            <td>
+                All movies
+            </td>
+            <td>
+                <code>/movies</code>
+            </td>
+            <td>
+                GET
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A JSON object holding data about all the movies
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Single movie by title
+            </td>
+            <td>
+                <code>/movies/[title]</code>
+            </td>
+            <td>
+                GET
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A JSON object holding data
+                about a single movie,
+                containing description, genre, director, image URL. <br> Example:
+                <pre>
+{
+    "Title": "300",
+    "Description": "King Leonidas of Sparta and a force of 300 men fight the Persians at Thermopylae in 480 B.C.",
+    "Year": "2006",
+    "Genre":
+        [
+            {
+                "name": "Action",
+                "Description": "Action Movie"
+            },
+            {
+                "name": "Fantasy",
+                "Description": "Fantasy Movie"
+            }
+        ],
+    "Director": {
+        "name": "Zack Snyder",
+        "Bio": "Bio fo Director",
+        "Birth": "xx"
+    },
+    "Poster": "http://ia.media-imdb.com/images/M/MV5BMjAzNTkzNjcxNl5BMl5BanBnXkFtZTYwNDA4NjE3._V1_SX300.jpg",
+    "Images": [
+        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTMwNTg5MzMwMV5BMl5BanBnXkFtZTcwMzA2NTIyMw@@._V1_SX1777_CR0,0,1777,937_AL_.jpg",
+        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQwNTgyNTMzNF5BMl5BanBnXkFtZTcwNDA2NTIyMw@@._V1_SX1777_CR0,0,1777,935_AL_.jpg",
+        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MjQzOTEwMV5BMl5BanBnXkFtZTcwMzE2NTIyMw@@._V1_SX1777_CR0,0,1777,947_AL_.jpg"
+    ]
+}
+            </pre>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Single genre by name and movie title
+            </td>
+            <td>
+                <code>/movies/[title]/genre/[name]</code>
+            </td>
+            <td>
+                GET
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A JSON object holding data
+                about a single movie genre,
+                containing name and description <br> Example:
+                <pre>
+{
+    "name": "Fantasy",
+    "Description": "Fantasy Movie"
+}
+            </pre>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Director by movie title
+            </td>
+            <td>
+                <code>/movies/[title]/director</code>
+            </td>
+            <td>
+                GET
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A JSON object holding data
+                about a single movie director data <br> Example:
+                <pre>
+{
+    "name": "Zack Snyder",
+    "Bio": "Bio fo Director",
+    "Birth": "xx"
+}
+            </pre>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                New user register
+            </td>
+            <td>
+                <code>/users</code>
+            </td>
+            <td>
+                POST
+            </td>
+            <td>
+                A JSON object holding
+                data about the user to
+                add, structured like:
+                <pre>
+{
+    email : "testname@mail.com" 
+    name : "Test User"    
+}
+</pre>
 
+            </td>
+            <td>
+                A JSON object holding data
+                about the user that was
+                added, including an ID:
+                <pre>
+{
+    id:1,
+    email : "testname@mail.com" 
+    name : "Test User"
+}
+</pre>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Update user data
+            </td>
+            <td>
+                <code>/users/[email]/[username]</code>
+            </td>
+            <td>
+                PUT
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A text message indicating
+                the user data was updated
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Add movie to user's favorites list
+            </td>
+            <td>
+                <code>/users/[email]/[movietitle]</code>
+            </td>
+            <td>
+                PUT
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A text message indicating
+                the user favorites list is added with the movie
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Delete movie from user's favorites list
+            </td>
+            <td>
+                <code>/users/[email]/[movietitle]</code>
+            </td>
+            <td>
+                DELETE
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A text message indicating that the movie is removed from
+                the user favorites list
+            </td>
+        </tr>
+        <tr>
+            <td>
+                User deregister
+            </td>
+            <td>
+                <code>/users/[email]</code>
+            </td>
+            <td>
+                DELETE
+            </td>
+            <td>
+                none
+            </td>
+            <td>
+                A text message indicating that the user has been deregistered
+            </td>
+        </tr>
+    </table>
+</body>
 </html>
