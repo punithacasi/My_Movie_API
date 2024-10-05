@@ -3,143 +3,229 @@ const express = require("express"),
     bodyParser = require('body-parser'),
     uuid = require('uuid');
 
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const movies = Models.movies;
+const users = Models.users;
+
+mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-
-const movieList = [
-    {
-        "Title": "Avatar",
-        "Description": "A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
-        "Year": "2009",
-        "Genre": [
-            {
-                "name": "Action",
-                "Description": "Action Movie"
-            },
-            {
-                "name": "Fantasy",
-                "Description": "Fantasy Movie"
-            }
-        ],
-        "Director": {
-            "name": "James Cameron",
-            "Bio": "Bio fo Director",
-            "Birth": "xx"
-        },
-        "Poster": "http://ia.media-imdb.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_SX300.jpg",
-        "Images": [
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMjEyOTYyMzUxNl5BMl5BanBnXkFtZTcwNTg0MTUzNA@@._V1_SX1500_CR0,0,1500,999_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BNzM2MDk3MTcyMV5BMl5BanBnXkFtZTcwNjg0MTUzNA@@._V1_SX1777_CR0,0,1777,999_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTY2ODQ3NjMyMl5BMl5BanBnXkFtZTcwODg0MTUzNA@@._V1_SX1777_CR0,0,1777,999_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTMxOTEwNDcxN15BMl5BanBnXkFtZTcwOTg0MTUzNA@@._V1_SX1777_CR0,0,1777,999_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTYxMDg1Nzk1MV5BMl5BanBnXkFtZTcwMDk0MTUzNA@@._V1_SX1500_CR0,0,1500,999_AL_.jpg"
-        ]
-    },
-    {
-        "Title": "I Am Legend",
-        "Description": "Years after a plague kills most of humanity and transforms the rest into monsters, the sole survivor in New York City struggles valiantly to find a cure.",
-        "Year": "2007",
-        "Genre": [
-            {
-                "name": "Action",
-                "Description": "Action Movie"
-            },
-            {
-                "name": "Horror",
-                "Description": "Horror Movie"
-            }
-        ],
-        "Director": {
-            "name": "Francis Lawrence",
-            "Bio": "Bio fo Director",
-            "Birth": "xx"
-        },
-        "Poster": "http://ia.media-imdb.com/images/M/MV5BMTU4NzMyNDk1OV5BMl5BanBnXkFtZTcwOTEwMzU1MQ@@._V1_SX300.jpg",
-        "Images": [
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTI0NTI4NjE3NV5BMl5BanBnXkFtZTYwMDA0Nzc4._V1_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTIwMDg2MDU4M15BMl5BanBnXkFtZTYwMTA0Nzc4._V1_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc5MDM1OTU5OV5BMl5BanBnXkFtZTYwMjA0Nzc4._V1_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTA0MTI2NjMzMzFeQTJeQWpwZ15BbWU2MDMwNDc3OA@@._V1_.jpg"
-        ]
-    },
-    {
-        "Title": "300",
-        "Description": "King Leonidas of Sparta and a force of 300 men fight the Persians at Thermopylae in 480 B.C.",
-        "Year": "2006",
-        "Genre":
-            [
-                {
-                    "name": "Action",
-                    "Description": "Action Movie"
-                },
-                {
-                    "name": "Fantasy",
-                    "Description": "Fantasy Movie"
-                }
-            ],
-        "Director": {
-            "name": "Zack Snyder",
-            "Bio": "Bio fo Director",
-            "Birth": "xx"
-        },
-        "Poster": "http://ia.media-imdb.com/images/M/MV5BMjAzNTkzNjcxNl5BMl5BanBnXkFtZTYwNDA4NjE3._V1_SX300.jpg",
-        "Images": [
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTMwNTg5MzMwMV5BMl5BanBnXkFtZTcwMzA2NTIyMw@@._V1_SX1777_CR0,0,1777,937_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQwNTgyNTMzNF5BMl5BanBnXkFtZTcwNDA2NTIyMw@@._V1_SX1777_CR0,0,1777,935_AL_.jpg",
-            "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MjQzOTEwMV5BMl5BanBnXkFtZTcwMzE2NTIyMw@@._V1_SX1777_CR0,0,1777,947_AL_.jpg"
-        ]
-    }
-];
-
-// Get all movies from the list
+// Get all movies
 app.get('/movies', (req, res) => {
-    res.json(movieList);
+    movies.find()
+        .then((movieList) => {
+            res.json(movieList);
+        })
+        .catch((err) => {
+            res.status(500).send('Error: ' + err);
+        });
 });
 
-// Get a movie data by title
+// Get a movie by title
 app.get('/movies/:title', (req, res) => {
-    res.json(movieList.find((movie) => { return movie.Title === req.params.title }));
+    movies.findOne({ 'title': req.params.title })
+        .then((movieList) => {
+            // Logic here
+            res.json(movieList);
+        })
+        .catch((err) => {
+            // Logic here
+            res.status(400).send('Error GET Movies');
+        });
 });
 
-// Get all genre data of a movie by title
-app.get('/movies/:title/genre/:name', (req, res) => {
-    res.send('Successful GET request returning data of given genre of a movie');
+// Get a movie genre by name
+app.get('/movies/genre/:name', (req, res) => {
+    movies.findOne({ 'genre.name': req.params.name })
+        .then((movie) => {
+            // Logic here
+            res.json(movie.genre);
+        })
+        .catch((err) => {
+            // Logic here
+            res.status(400).send('Error GET Movies');
+        });
 });
 
-// Get the director data of a movie by title
-app.get('/movies/:title/director', (req, res) => {
-    res.send('Successful GET request returning data of director of the movie');
+// Get a movie director by name
+app.get('/movies/director/:name', (req, res) => {
+    movies.findOne({ 'director.name': req.params.name })
+        .then((movie) => {
+            // Logic here
+            res.json(movie.director);
+        })
+        .catch((err) => {
+            // Logic here
+            res.status(400).send('Error GET Movies');
+        });
 });
 
-// Create a new user with email
-app.post('/users', (req, res) => {
-    res.status(201).send('Successful POST request returning created user data');
+// Get all users
+app.get('/users', async (req, res) => {
+    users.find()
+        .then((userList) => {
+            res.json(userList);
+        })
+        .catch((err) => {
+            res.status(500).send('Error: ' + err);
+        });
 });
 
-// Update user data with registered email
-app.put('/users/:email/:username', (req, res) => {
-    res.status(200).send('Successful PUT request returning updated user info');
+// Create a new user
+app.post('/users', async (req, res) => {
+    await users.findOne({ userName: req.body.userName })
+        .then((user) => {
+            if (user) {
+                return res.status(400).send(req.body.userName + ' already exists.');
+            } else {
+                users.create({
+                    userName: req.body.userName,
+                    password: req.body.password,
+                    email: req.body.email,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    birthDate: req.body.birthDate,
+                    createdDate: Date.now()
+                })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).send('Error: ' + error);
+                    });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Error: ' + error);
+        });
+});
+
+// Update user info by name
+app.put('/users/:username', async (req, res) => {
+    await users.findOne({ 'userName': req.params.username })
+        .then((user) => {
+            if (user) {
+                console.log(user);
+                users.updateOne({ 'userName': req.params.username }, {
+                    $set: {
+                        userName: req.body.userName,
+                        password: req.body.password,
+                        email: req.body.email,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        birthDate: req.body.birthDate
+                    }
+                })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).send('Error: ' + error);
+                    });
+            } else {
+                console.log(user);
+                return res.status(401).send(req.params.username + ' does not exists.');
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
 // Remove or deregister an existing user
-app.delete('/users/:email', (req, res) => {
-    res.status(200).send('Successful DELETE request returning delete user status');
+app.delete('/users/:username', async (req, res) => {
+    console.log(req.params.username)
+    await users.findOne({ 'userName': req.params.username })
+        .then((user) => {
+            if (user) {
+                console.log(user);
+                users.deleteOne({ 'userName': req.params.username })
+                    .then((user) => {
+                        res.status(200).send("User successfully de-registered");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).send('Error: ' + error);
+                    });
+            } else {
+                console.log(user);
+                return res.status(401).send(req.params.username + ' does not exists.');
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
 // Add a movie to the user's favorites list
-app.put('/users/:email/favorites/:movie', (req, res) => {
-    res.status(200).send('Successful POST request returning added favorites movie');
+app.put('/users/:username/favorite/:movieid', async (req, res) => {
+    await users.findOne({ 'userName': req.params.username })
+        .then((user) => {
+            if (user) {
+                users.updateOne({ 'userName': req.params.username }, {
+                    $push: {
+                        favorite: req.params.movieid
+                    }
+                })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).send('Error: ' + error);
+                    });
+            } else {
+                console.log(user);
+                return res.status(401).send(req.params.username + ' does not exists.');
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
 // Remove a movie from the user's favorites list
-app.delete('/users/:email/favorites/:movie', (req, res) => {
-    res.status(200).send('Successful DELETE request returning deleted favorites movie status');
+app.delete('/users/:username/favorite/:movieid', async (req, res) => {
+    await users.findOne({ 'userName': req.params.username })
+        .then((user) => {
+            if (user) {
+                users.updateOne({ 'userName': req.params.username }, {
+                    $pull: {
+                        favorite: req.params.movieid
+                    }
+                })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).send('Error: ' + error);
+                    });
+            } else {
+                console.log(user);
+                return res.status(401).send(req.params.username + ' does not exists.');
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
 
 app.use(express.static('public'));
 
-// Hanle all other routes
+// Handle all other routes
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');

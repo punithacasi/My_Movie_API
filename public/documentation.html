@@ -108,41 +108,32 @@
                 containing description, genre, director, image URL. <br> Example:
                 <pre>
 {
-    "Title": "300",
-    "Description": "King Leonidas of Sparta and a force of 300 men fight the Persians at Thermopylae in 480 B.C.",
-    "Year": "2006",
-    "Genre":
-        [
-            {
-                "name": "Action",
-                "Description": "Action Movie"
-            },
-            {
-                "name": "Fantasy",
-                "Description": "Fantasy Movie"
-            }
-        ],
-    "Director": {
-        "name": "Zack Snyder",
-        "Bio": "Bio fo Director",
-        "Birth": "xx"
+    _id: ObjectId('66ffd38a0cd7d2bec4c73c0a'),
+    title: 'Chasing Dreams',
+    description: "A heartwarming story about a young artist's journey to find her voice and inspire others.",
+    imagePath: '/images/chasing_dreams.jpg',
+    featured: 'false',
+    genre: {
+        name: 'Fantasy',
+        description: 'A genre that features magical elements, mythical creatures, and fantastical worlds.'
     },
-    "Poster": "http://ia.media-imdb.com/images/M/MV5BMjAzNTkzNjcxNl5BMl5BanBnXkFtZTYwNDA4NjE3._V1_SX300.jpg",
-    "Images": [
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTMwNTg5MzMwMV5BMl5BanBnXkFtZTcwMzA2NTIyMw@@._V1_SX1777_CR0,0,1777,937_AL_.jpg",
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQwNTgyNTMzNF5BMl5BanBnXkFtZTcwNDA2NTIyMw@@._V1_SX1777_CR0,0,1777,935_AL_.jpg",
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc0MjQzOTEwMV5BMl5BanBnXkFtZTcwMzE2NTIyMw@@._V1_SX1777_CR0,0,1777,947_AL_.jpg"
-    ]
+    director: {
+        name: 'Christopher Nolan',
+        bio: 'TEST An acclaimed director known for his complex narratives and innovative filmmaking techniques. His works often explore themes of time, memory, and reality.',
+        birthDate: ISODate('1970-07-30T00:00:00.000Z'),
+        dearthDate: null
+    },
+    bio: 'TEST An acclaimed director known for his complex narratives and innovative filmmaking techniques. His works often explore themes of time, memory, and reality.'
 }
             </pre>
             </td>
         </tr>
         <tr>
             <td>
-                Single genre by name and movie title
+                Single genre by name
             </td>
             <td>
-                <code>/movies/[title]/genre/[name]</code>
+                <code>/movies/genre/[name]</code>
             </td>
             <td>
                 GET
@@ -164,10 +155,10 @@
         </tr>
         <tr>
             <td>
-                Director by movie title
+                Single director by name
             </td>
             <td>
-                <code>/movies/[title]/director</code>
+                <code>/movies/director/[name]</code>
             </td>
             <td>
                 GET
@@ -203,8 +194,12 @@
                 add, structured like:
                 <pre>
 {
-    email : "testname@mail.com" 
-    name : "Test User"    
+    "userName": "newUser1",
+    "email": "username@mail.com",
+    "password": "password",
+    "firstName" : "firstName",
+    "lastName": "lastName",
+    "birthDate": "1986-04-16T00:00:00.000Z"
 }
 </pre>
 
@@ -215,9 +210,15 @@
                 added, including an ID:
                 <pre>
 {
-    id:1,
-    email : "testname@mail.com" 
-    name : "Test User"
+    "userName": "newUser1",
+    "password": "password",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "birthDate": "1986-04-16T00:00:00.000Z",
+    "createdDate": "2024-10-05T13:58:22.912Z",
+    "favorite": [],
+    "_id": "670145fe918c4b4a7c137739",
+    "__v": 0
 }
 </pre>
             </td>
@@ -227,13 +228,22 @@
                 Update user data
             </td>
             <td>
-                <code>/users/[email]/[username]</code>
+                <code>/users/[username]</code>
             </td>
             <td>
                 PUT
             </td>
             <td>
-                none
+                <pre>
+{
+  "userName": "newUser2",
+  "email": "username@mail.com",
+  "password": "password",
+  "firstName" : "firstName",
+  "lastName": "lastName",
+  "birthDate": "1986-04-16T00:00:00.000Z"
+}
+</pre>
             </td>
             <td>
                 A text message indicating
@@ -246,7 +256,7 @@
                 Add movie to user's favorites list
             </td>
             <td>
-                <code>/users/[email]/[movietitle]</code>
+                <code>/users/[username]/favorite/[movieid]</code>
             </td>
             <td>
                 PUT
@@ -264,7 +274,7 @@
                 Delete movie from user's favorites list
             </td>
             <td>
-                <code>/users/[email]/[movietitle]</code>
+                <code>/users/[username]/favorite/[movieid]</code>
             </td>
             <td>
                 DELETE
@@ -282,7 +292,7 @@
                 User deregister
             </td>
             <td>
-                <code>/users/[email]</code>
+                <code>/users/[username]</code>
             </td>
             <td>
                 DELETE
@@ -296,4 +306,5 @@
         </tr>
     </table>
 </body>
+
 </html>
