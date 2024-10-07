@@ -14,7 +14,7 @@ let movieSchema = mongoose.Schema({
         bio: String,
         birthDate: Date,
         dearthDate: Date
-    }    
+    }
 });
 
 let userSchema = mongoose.Schema({
