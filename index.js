@@ -19,20 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cors = require('cors');
-//app.use(cors());
-
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
-
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) { // If a specific origin isn’t found on the list of allowed origins
-            let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-            return callback(new Error(message), false);
-        }
-        return callback(null, true);
-    }
-}));
+app.use(cors());
 
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -110,7 +97,7 @@ app.post('/users',
         check('email', 'Email does not appear to be valid').isEmail()
     ], async (req, res) => {
         console.log("TEST");
-        console.log(req.body.password );
+        console.log(req.body.password);
 
         // check the validation object for errors
         let errors = validationResult(req);
@@ -281,6 +268,6 @@ app.get('/error-test', (req, res, next) => {
 });
 
 const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
+app.listen(port, '0.0.0.0', () => {
+    console.log('Listening on Port ' + port);
 });
