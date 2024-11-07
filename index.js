@@ -11,8 +11,8 @@ const { check, validationResult } = require('express-validator');
 const movies = Models.movies;
 const users = Models.users;
 
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect("mongodb+srv://punithacasi:1JKdIwqz8HvJk9TF@myflixdb.cqvnl.mongodb.net/?retryWrites=true&w=majority&appName=myFlixDB", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect("mongodb+srv://punithacasi:1JKdIwqz8HvJk9TF@myflixdb.cqvnl.mongodb.net/?retryWrites=true&w=majority&appName=myFlixDB", { useNewUrlParser: true, useUnifiedTopology: true });
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
