@@ -11,7 +11,8 @@ const { check, validationResult } = require('express-validator');
 const movies = Models.movies;
 const users = Models.users;
 
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://punithacasi:1JKdIwqz8HvJk9TF@myflixdb.cqvnl.mongodb.net/?retryWrites=true&w=majority&appName=myFlixDB", { useNewUrlParser: true, useUnifiedTopology: true });
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -140,7 +141,7 @@ app.post('/users',
 // Update user info by name
 app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
     // CONDITION TO CHECK ADDED HERE
-    if (req.user.userName !== req.params.username) {
+    if (req.body.userName !== req.params.username) {
         return res.status(400).send('Permission denied');
     }
     // CONDITION ENDS
