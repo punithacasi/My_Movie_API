@@ -19,11 +19,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//const cors = require('cors');
-//app.use(cors());
-
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://my-flix-movie.netlify.app'];
+app.use(cors());
+
+//const cors = require('cors');
+//let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://my-flix-movie.netlify.app'];
 
 app.use(cors({
     origin: (origin, callback) => {
