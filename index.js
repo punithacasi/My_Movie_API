@@ -10,9 +10,10 @@ const { check, validationResult } = require('express-validator');
 
 const movies = Models.movies;
 const users = Models.users;
-
+// Live (connect API hosted on Heroku to mongoDB hosted on Atlas):
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+//creates an express instance
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,7 +43,12 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// Get all movies
+
+
+
+/**
+* GET all movies
+*/
 //app.get('/movies', async (req, res) => {
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await movies.find()
@@ -56,7 +62,9 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 });
 
 
-// Get a movie by title
+/**
+* Get a movie by title
+*/
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
     movies.findOne({ 'title': req.params.title })
         .then((movieList) => {
@@ -69,7 +77,9 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
         });
 });
 
-// Get a movie genre by name
+/**
+* Get a movie genre by name
+*/
 app.get('/movies/genre/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
     movies.findOne({ 'genre.name': req.params.name })
         .then((movie) => {
@@ -82,7 +92,10 @@ app.get('/movies/genre/:name', passport.authenticate('jwt', { session: false }),
         });
 });
 
-// Get a movie director by name
+/**
+* Get a movie director by name
+*/
+
 app.get('/movies/director/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
     movies.findOne({ 'director.name': req.params.name })
         .then((movie) => {
@@ -95,7 +108,9 @@ app.get('/movies/director/:name', passport.authenticate('jwt', { session: false 
         });
 });
 
-// Get all users
+/**
+* Get all users
+*/
 app.get('/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await users.find()
         .then((userList) => {
@@ -106,7 +121,9 @@ app.get('/users', passport.authenticate('jwt', { session: false }), async (req, 
         });
 });
 
-// Create a new user
+/**
+* Create a new user
+*/
 app.post('/users',
     [
         check('userName', 'Username is required').isLength({ min: 5 }),
@@ -154,7 +171,9 @@ app.post('/users',
             });
     });
 
-// Update user info by name
+/**
+* Update user info by name
+*/
 app.put('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
     // CONDITION TO CHECK ADDED HERE
     if (req.body.userName !== req.params.username) {
@@ -193,7 +212,9 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), as
         });
 });
 
-// Remove or deregister an existing user
+/**
+* Remove or deregister an existing user
+*/
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await users.findOne({ 'userName': req.params.username })
         .then((user) => {
@@ -218,7 +239,9 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
         });
 });
 
-// Add a movie to the user's favorites list
+/**
+* Add a movie to the user's favorites list
+*/
 app.put('/users/:username/favorite/:movieid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await users.findOne({ 'userName': req.params.username })
         .then((user) => {
@@ -246,7 +269,9 @@ app.put('/users/:username/favorite/:movieid', passport.authenticate('jwt', { ses
         });
 });
 
-// Remove a movie from the user's favorites list
+/**
+* Remove a movie from the user's favorites list
+*/
 app.delete('/users/:username/favorite/:movieid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await users.findOne({ 'userName': req.params.username })
         .then((user) => {
@@ -276,7 +301,9 @@ app.delete('/users/:username/favorite/:movieid', passport.authenticate('jwt', { 
 
 app.use(express.static('public'));
 
-// Handle all other routes
+/**
+*  Handle all other routes
+*/
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
